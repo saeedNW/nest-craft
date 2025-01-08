@@ -1,0 +1,3 @@
+networks:
+  { { NETWORK } }:
+    driver: bridge

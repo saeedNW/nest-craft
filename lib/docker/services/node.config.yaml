@@ -1,0 +1,12 @@
+services:
+  node:
+    build:
+      context: ./
+    container_name: node
+    ports:
+      - "3000:3000"
+    volumes:
+      - /application/node_modules
+    networks:
+      - { { NETWORK } }
+    restart: always
