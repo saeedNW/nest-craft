@@ -2,7 +2,7 @@
 
 Nest Craft is a new way of scaffolding custom NestJS projects. It provides various options and configurations to help you quickly set up your project, including Docker integration, custom utilities, and more.
 
-[![npm version](https://img.shields.io/npm/v/nestjs-mongoose-pagination.svg)](https://www.npmjs.com/package/nest-craft)
+[![npm version](https://badgen.net/npm/v/nest-craft)](https://www.npmjs.com/package/nest-craft)
 
 ---
 
