@@ -23,6 +23,7 @@ import { selectDockerServices } from "../lib/docker/service-selector.js";
 import { dockerComposeGenerator } from "../lib/docker/config-generator.js";
 import { filesManager } from "../lib/files/files.manager.js";
 import { modifyMainTsFile } from "../lib/files/main-file.modifier.js";
+import { updateJestConfig } from "../lib/files/package-json.modifier.js";
 
 /**
  * Main entry point for the Nest Craft CLI.
@@ -450,6 +451,9 @@ async function initializeProject(
 
 				// Modify `main.ts` file and add required utilities
 				await modifyMainTsFile(targetDirectory, options);
+
+				// Update jest config to make tests to accept absolute path
+				await updateJestConfig(targetDirectory);
 			},
 		},
 	]);
