@@ -3,6 +3,7 @@
 Nest Craft is a new way of scaffolding custom NestJS projects. It provides various options and configurations to help you quickly set up your project, including Docker integration, custom utilities, and more.
 
 [![npm version](https://badgen.net/npm/v/nest-craft)](https://www.npmjs.com/package/nest-craft)
+![License](https://img.shields.io/npm/l/@nestjs/cli.svg)
 
 ---
 
@@ -20,6 +21,7 @@ Nest Craft is a new way of scaffolding custom NestJS projects. It provides vario
   - Multer File Upload utility
 - Git repository initialization (optional)
 - ESLint configuration setup
+- Jest configuration setup
 
 ---
 
@@ -65,7 +67,7 @@ In the first step of the process you need to chose a name or path for your proje
 
 Nest Craft allows you to include a Docker Compose configuration. Select from predefined services like:
 
-- Node (Dockerfile and docker-compose config for the project)
+- Node (Dockerfile included)
 - MongoDB
 - Mongo-Express
 - Redis
@@ -78,7 +80,7 @@ Nest Craft allows you to include a Docker Compose configuration. Select from pre
 - Elasticsearch
 - Kibana
 - Kafka
-- Nginx
+- Nginx (Nginx basic config file included)
 
 ### Pagination Utilities
 
@@ -102,6 +104,14 @@ Optionally include:
 ### File Upload (Multer)
 
 Adds Multer integration for file uploads.
+
+### Eslint Configuration
+
+Optionally determine whether Eslint uses tabs for indentation or not
+
+### Jest Configuration
+
+Updated Jest configuration to support absolute imports
 
 ---
 

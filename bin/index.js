@@ -264,6 +264,11 @@ async function collectOptions() {
 	// Prompt the user to decide whether they need Multer file uploader.
 	const multer = await booleanPrompt("Do you need Multer File Uploader?");
 
+	// Prompt the user to decide whether they want to use tabs as indentation or not
+	const eslint = await booleanPrompt(
+		"Do you want eslint to use tabs for indentation instead of spaces?"
+	);
+
 	// Prompt the user for any additional 'nest new' options.
 	const nestOptions = await textPrompt(
 		"Enter any other 'nest new' options you need.",
@@ -280,6 +285,7 @@ async function collectOptions() {
 		userDefinition,
 		paginationType,
 		multer,
+		eslint,
 		nestOptions: sanitizeNestOptions(nestOptions),
 	};
 }
