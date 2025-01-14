@@ -1,3 +1,4 @@
+import { displayHelp } from "./help.js";
 import { versionManager } from "./version-manager.js";
 
 /**
@@ -18,6 +19,12 @@ export function commandManager() {
 		case "--version": // Full version flag
 		case "-v": // Short form for version flag
 			versionManager();
+			break;
+
+		// Help flags display help information
+		case "--help": // Full help flag
+		case "-h": // Short form for help flag
+			displayHelp();
 			break;
 
 		// Unknown arguments log an error and exit with a failure code
