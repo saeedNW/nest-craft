@@ -1,4 +1,5 @@
 import { displayHelp } from "./help.js";
+import { initialization } from "./init.js";
 import { versionManager } from "./version-manager.js";
 
 /**
@@ -13,6 +14,7 @@ export function commandManager() {
 		case undefined: // No arguments passed
 		case "init": // Full initialization command
 		case "i": // Short form for initialization
+			initialization()
 			return;
 
 		// Version flags trigger the version manager
