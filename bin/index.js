@@ -24,6 +24,7 @@ import { dockerComposeGenerator } from "../lib/docker/config-generator.js";
 import { filesManager } from "../lib/files/files.manager.js";
 import { modifyMainTsFile } from "../lib/files/main-file.modifier.js";
 import { updateJestConfig } from "../lib/files/package-json.modifier.js";
+import { commandManager } from "./argv-manager.js";
 
 /**
  * Main entry point for the Nest Craft CLI.
@@ -33,6 +34,9 @@ import { updateJestConfig } from "../lib/files/package-json.modifier.js";
 async function main() {
 	// Verify the script is not executed with superuser privileges.
 	verifyNonSudo();
+
+	// Tool's Argv commands and process manager
+	commandManager();
 
 	// Display the CLI banner and introduction message.
 	displayBanner();
