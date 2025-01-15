@@ -19,9 +19,12 @@ Nest Craft is a new way of scaffolding custom NestJS projects. It provides vario
   - Swagger Integration
   - Pagination Utilities for TypeORM or Mongoose
   - Multer File Upload utility
+- Ability to add features to existing projects
 - Git repository initialization (optional)
 - ESLint configuration setup
 - Jest configuration setup
+- Version flag to check the current version
+- Help command for usage guidance
 
 ---
 
@@ -43,21 +46,58 @@ Run the `nest-craft` command to create a new project:
 nest-craft
 ```
 
-After starting the process you can Follow the on-screen instructions to set up your project.
+Follow the on-screen instructions to set up your project.
 
-### Project Name or Path
+### Commands and Flags
 
-In the first step of the process you need to chose a name or path for your project
+#### Initialize a New Project
 
-- **Project Name:**
+```bash
+nest-craft init
+```
 
+- **Project Name or Path:**
   - If you provide a simple name (e.g., `my-app`), the NestJS project will be created in a new directory named `my-app` within the current working directory.
-
-- **Project Path:**
   - If you provide a full path (e.g., `/path/to/my-app`), the tool will:
     1. Use the last segment of the path (`my-app`) as the project name.
     2. Use the rest of the path (`/path/to`) as the parent directory.
     3. Create any missing directories along the specified path and scaffold the NestJS project.
+
+#### Add Features to an Existing Project
+
+```bash
+nest-craft --add-feature
+```
+
+- Adds selected features to an existing NestJS project. Follow the interactive prompts to configure the desired features.
+
+#### Check Version
+
+```bash
+nest-craft --version
+```
+
+or
+
+```bash
+nest-craft -v
+```
+
+- Displays the current version of Nest Craft.
+
+#### Display Help
+
+```bash
+nest-craft --help
+```
+
+or
+
+```bash
+nest-craft -h
+```
+
+- Displays a list of available commands and their descriptions.
 
 ---
 
@@ -86,8 +126,8 @@ Nest Craft allows you to include a Docker Compose configuration. Select from pre
 
 Select pagination utilities based on your ORM/ODM:
 
-- **TypeORM**: Installs `@nestjs/typeorm` and `typeorm` and add pagination utility file to the project.
-- **Mongoose**: Installs `@nestjs/mongoose` and `mongoose` and add pagination utility file to the project.
+- **TypeORM**: Installs `@nestjs/typeorm` and `typeorm` and adds a pagination utility file to the project.
+- **Mongoose**: Installs `@nestjs/mongoose` and `mongoose` and adds a pagination utility file to the project.
 
 ### Swagger Integration
 
@@ -105,13 +145,13 @@ Optionally include:
 
 Adds Multer integration for file uploads.
 
-### Eslint Configuration
+### ESLint Configuration
 
-Optionally determine whether Eslint uses tabs for indentation or not
+Optionally determine whether ESLint uses tabs for indentation or not.
 
 ### Jest Configuration
 
-Updated Jest configuration to support absolute imports
+Updated Jest configuration to support absolute imports.
 
 ---
 

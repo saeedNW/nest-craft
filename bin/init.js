@@ -1,6 +1,5 @@
-import { intro, outro, tasks } from "@clack/prompts";
+import { outro, tasks } from "@clack/prompts";
 import chalk from "chalk";
-import figlet from "figlet";
 import { textPrompt } from "../lib/prompts/text.prompt.js";
 import { cancelPrompt } from "../lib/prompts/cancel.prompt.js";
 import { selectPrompt } from "../lib/prompts/select.prompt.js";
@@ -18,10 +17,14 @@ import { updateJestConfig } from "../lib/files/package-json.modifier.js";
 import { resolveProjectPaths } from "../lib/functions/resolve-project-path.js";
 import { createParentDirectory } from "../lib/functions/parent-dir-manager.js";
 import { ensureDirectoryPermissions } from "../lib/functions/ensure-dir-permission.js";
+import { displayBanner } from "../lib/functions/main-banner.js";
+import { promptPackageManager } from "../lib/prompts/package-manager.prompt.js";
+import { booleanPrompt } from "../lib/prompts/boolean.prompt.js";
+import { promptPaginationType } from "../lib/prompts/pagination.prompt.js";
 
 export async function initialization() {
 	// Display the CLI banner and introduction message.
-	displayBanner();
+	displayBanner("Welcome to the new way of creating NestJS projects");
 
 	// Initialize a variable to store the newly created directory for error handling.
 	let newDirectory;
@@ -75,18 +78,6 @@ export async function initialization() {
 }
 
 /**
- * Displays the CLI banner and an introductory message.
- * Uses ASCII art and colored text to enhance the user experience.
- */
-function displayBanner() {
-	// Render the "Nest Craft" ASCII art using Figlet and color it green.
-	console.log(chalk.green(figlet.textSync("Nest Craft")));
-
-	// Display an introductory message below the banner in cyan.
-	intro(chalk.cyan("Welcome to the new way of creating NestJS projects"));
-}
-
-/**
  * Prompts the user to decide whether to initialize a Git repository.
  *
  * Provides two options:
@@ -101,24 +92,6 @@ async function promptGitRepo() {
 	return await selectPrompt("Do you need a Git Repo?", [
 		{ value: "", label: "Initialize a Git Repo (Default)" },
 		{ value: "--skip-git", label: "Don't initialize a Git Repo" },
-	]);
-}
-
-/**
- * Prompts the user to select a package manager for the project.
- *
- * Provides the following options:
- * - npm
- * - yarn
- * - pnpm
- *
- * @returns {Promise<string>} A string representing the selected package manager:
- */
-async function promptPackageManager() {
-	return await selectPrompt("Which package manager should be used?", [
-		{ value: "npm", label: "npm" },
-		{ value: "yarn", label: "yarn" },
-		{ value: "pnpm", label: "pnpm" },
 	]);
 }
 
@@ -202,69 +175,6 @@ async function collectOptions() {
 		eslint,
 		nestOptions: sanitizeNestOptions(nestOptions),
 	};
-}
-
-/**
- * Prompts the user with a yes/no question and returns the selected boolean value.
- *
- * This function uses a selection prompt with two options:
- * - Yes (true)
- * - No (false)
- *
- * @param {string} message The message or question to display to the user.
- * @returns {Promise<boolean>} A boolean value indicating the user's choice:
- * - `true` for "Yes"
- * - `false` for "No"
- */
-async function booleanPrompt(message) {
-	// Display a selection prompt with Yes/No options.
-	const response = await selectPrompt(message, [
-		{ value: true, label: "Yes" },
-		{ value: false, label: "No" },
-	]);
-
-	// Handle cancellation during the prompt.
-	cancelPrompt(response);
-
-	// Return the boolean response (true for Yes, false for No).
-	return response;
-}
-
-/**
- * Prompts the user to determine if pagination is required and, if so, which ORM or ODM should be used for pagination.
- *
- * This function first asks if pagination is needed. If the user selects "Yes", it then asks which ORM or ODM should
- * be used for pagination (e.g., TypeORM, Mongoose, or None).
- *
- * @returns {Promise<string|undefined>} The selected pagination type:
- * - `typeorm` for TypeORM,
- * - `mongoose` for Mongoose,
- * - `undefined` for None (if pagination is not needed).
- */
-async function promptPaginationType() {
-	// Ask if the user needs a Pagination Utility.
-	const paginationRequired = await booleanPrompt(
-		"Do you need a Pagination Utility?"
-	);
-
-	// If pagination is not required, return undefined.
-	if (!paginationRequired) return undefined;
-
-	// Ask which ORM/ODM the user wants to use for pagination.
-	const paginationType = await selectPrompt(
-		"Which ORM or ODM do you need for pagination?",
-		[
-			{ value: "typeorm", label: "TypeORM" }, // Option for TypeORM.
-			{ value: "mongoose", label: "Mongoose" }, // Option for Mongoose.
-			{ value: undefined, label: "None" }, // Option for no ORM/ODM (None).
-		]
-	);
-
-	// Handle cancellation during the prompt.
-	cancelPrompt(paginationType);
-
-	// Return the selected pagination type (could be 'typeorm', 'mongoose', or undefined).
-	return paginationType;
 }
 
 /**

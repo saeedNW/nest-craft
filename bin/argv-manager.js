@@ -1,3 +1,4 @@
+import { addFeature } from "./add-feature.js";
 import { displayHelp } from "./help.js";
 import { initialization } from "./init.js";
 import { versionManager } from "./version-manager.js";
@@ -13,8 +14,7 @@ export function commandManager() {
 		// No argument or valid initialization commands trigger initialization
 		case undefined: // No arguments passed
 		case "init": // Full initialization command
-		case "i": // Short form for initialization
-			initialization()
+			initialization();
 			return;
 
 		// Version flags trigger the version manager
@@ -28,6 +28,11 @@ export function commandManager() {
 		case "-h": // Short form for help flag
 			displayHelp();
 			break;
+
+		// Add-feature flag triggers the feature addition process
+		case "--add-feature":
+			addFeature();
+			return;
 
 		// Unknown arguments log an error and exit with a failure code
 		default:
