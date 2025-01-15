@@ -1,4 +1,5 @@
 import { addFeature } from "./add-feature.js";
+import { displayFeaturesAndOptions } from "./features-list.js";
 import { displayHelp } from "./help.js";
 import { initialization } from "./init.js";
 import { versionManager } from "./version-manager.js";
@@ -33,6 +34,12 @@ export function commandManager() {
 		case "--add-feature":
 			addFeature();
 			return;
+
+		// List-features flag displays the list of available features
+		case "--list-features": // Full list features flag
+		case "-l": // Short form for list features flag
+			displayFeaturesAndOptions();
+			break;
 
 		// Unknown arguments log an error and exit with a failure code
 		default:
