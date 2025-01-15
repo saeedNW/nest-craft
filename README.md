@@ -172,6 +172,12 @@ Updated Jest configuration to support absolute imports.
 
 ---
 
+## Change Logs
+
+For a detailed list of changes and updates, please refer to the [LOGS.md](LOGS.md) file.
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please submit an issue or pull request on the [GitHub repository](https://github.com/saeedNW/nest-craft).
