@@ -2,6 +2,8 @@
 
 Nest Craft is a new way of scaffolding custom NestJS projects. It provides various options and configurations to help you quickly set up your project, including Docker integration, custom utilities, and more.
 
+**Note:** The [`@nestjs/cli`](https://www.npmjs.com/package/@nestjs/cli) package is a must for this package to work because Nest Craft depends on it for its core logic. Make sure to install it before using Nest Craft.
+
 [![npm version](https://badgen.net/npm/v/nest-craft)](https://www.npmjs.com/package/nest-craft)
 ![License](https://img.shields.io/npm/l/@nestjs/cli.svg)
 
@@ -25,6 +27,7 @@ Nest Craft is a new way of scaffolding custom NestJS projects. It provides vario
 - Jest configuration setup
 - Version flag to check the current version
 - Help command for usage guidance
+- List of available features for implementation in a project
 
 ---
 
@@ -70,6 +73,20 @@ nest-craft --add-feature
 ```
 
 - Adds selected features to an existing NestJS project. Follow the interactive prompts to configure the desired features.
+
+#### List Available Features
+
+```bash
+nest-craft --list-features
+```
+
+or
+
+```bash
+nest-craft -l
+```
+
+- Displays a list of all available features and options that can be added to a new or existing project.
 
 #### Check Version
 
