@@ -2,15 +2,16 @@ import chalk from 'chalk';
 
 // Define available features and options
 const features = [
-  'Docker Compose configuration generator',
+  'Docker Compose Configuration Generator',
   'Custom Exception Filters',
   'Custom Pipes',
   'Custom Interceptors',
   'Swagger Integration',
   'Pagination Utilities for TypeORM or Mongoose',
-  'Multer File Upload utility',
-  'Prettier configuration setup',
-  'Jest configuration setup',
+  'Multer File Upload Utility',
+  'Prettier Configuration Setup',
+  'Jest Configuration Setup',
+  'API Prefix Configuration Setup',
 ];
 
 const options = [
@@ -42,6 +43,7 @@ const options = [
   'Swagger Integration: Automatically configures Swagger for API documentation',
   'Multer File Upload: Adds Multer integration for file uploads',
   'Prettier Configuration: Configurable Prettier setup to use tabs as indentation',
+  'Prefix Configuration: Add API Prefix support to the main file',
   'Jest Configuration: Updated Jest configuration for absolute imports',
 ];
 

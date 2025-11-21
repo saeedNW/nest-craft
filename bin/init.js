@@ -22,6 +22,7 @@ import {
   manageAppModule,
   runPrettier,
 } from '../lib/shell/shell.commands.js';
+import { promptGlobalPrefix } from '../lib/prompts/global-prefix.prompt.js';
 
 export async function initialization() {
   // Display the CLI banner and introduction message.
@@ -103,6 +104,8 @@ async function promptGitRepo() {
  * - User definition for `request.user`
  * - Pagination utility
  * - Multer file uploader
+ * - Prettier tab indentation
+ * - API prefix setup
  * - Additional NestJS options
  *
  * @returns {Promise<Object>} An object containing the selected options:
@@ -114,6 +117,8 @@ async function promptGitRepo() {
  * - userDefinition: Boolean indicating if a user definition for `request.user` is needed.
  * - paginationType: The selected pagination utility type (if any).
  * - multer: Boolean indicating if Multer file uploader is needed.
+ * - prettier: Boolean indicating if prettier should use tab indentation.
+ * - prefix: Boolean and text indicating if user want to use API prefix in their app.
  * - nestOptions: Sanitized additional NestJS options.
  */
 async function collectOptions() {
@@ -146,6 +151,9 @@ async function collectOptions() {
     'Do you want prettier to use tabs for indentation instead of spaces?',
   );
 
+  // Prompt the user to decide whether they want to use API prefix or not
+  const prefix = await promptGlobalPrefix();
+
   // Prompt the user for any additional 'nest new' options.
   const nestOptions = await textPrompt("Enter any other 'nest new' options you need.", false);
   cancelPrompt(nestOptions); // Handle cancellation during the prompt.
@@ -160,6 +168,7 @@ async function collectOptions() {
     paginationType,
     multer,
     prettier,
+    prefix,
     nestOptions: sanitizeNestOptions(nestOptions),
   };
 }
