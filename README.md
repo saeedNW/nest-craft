@@ -163,7 +163,7 @@ async upload(@UploadedFile() file: TMulterFile) {
 
 ## What's New
 
-Changes since `1.3.0` (unreleased work in `main`):
+Changes since `1.4.0` (unreleased work in `main`):
 
 - Overhauled file copier to always scaffold `.prettierrc`, `.prettierignore`, `eslint.config.mjs`, typed env/request definitions, and assets folder registration.
 - Brand-new Swagger UX (`configs/swagger.config.ts` + `assets/swagger-ui/**`) with endpoint search, RBAC indicators, a collapsible quick nav sidebar, and a locked `/api/doc/8888` mount.
