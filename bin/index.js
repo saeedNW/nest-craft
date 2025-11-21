@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { verifyNonSudo } from "../lib/functions/verify-non-sudo.js";
-import { commandManager } from "./argv-manager.js";
+import { verifyNonSudo } from '../lib/functions/verify-non-sudo.js';
+import { commandManager } from './argv-manager.js';
 
 /**
  * Main entry point for the Nest Craft CLI.
@@ -9,11 +9,11 @@ import { commandManager } from "./argv-manager.js";
  * setting up the project directory, and initializing the desired configurations.
  */
 async function main() {
-	// Verify the script is not executed with superuser privileges.
-	verifyNonSudo();
+  // Verify the script is not executed with superuser privileges.
+  verifyNonSudo();
 
-	// Tool's Argv commands and process manager
-	commandManager();
+  // Tool's Argv commands and process manager
+  commandManager();
 }
 
 // Execute the main function

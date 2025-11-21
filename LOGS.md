@@ -26,7 +26,7 @@
 
 ### Features
 
-- **[EslintConfig]**: Added a new prompt to allow users to choose their preferred indentation style when configuring the ESLint configuration file.
+- **[PrettierConfig]**: Added a new prompt to allow users to choose their preferred indentation style when configuring the Prettierrc file.
 
 ### Fix
 

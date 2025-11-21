@@ -1,9 +1,5 @@
-import {
-	CallHandler,
-	ExecutionContext,
-	Injectable,
-	NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Response } from 'express';
 import { map } from 'rxjs';
 
 /**
@@ -12,44 +8,45 @@ import { map } from 'rxjs';
  */
 @Injectable()
 export class ResponseTransformerInterceptor implements NestInterceptor {
-	intercept(context: ExecutionContext, next: CallHandler<any>): any {
-		/**
-		 * Handle the request and return the response object.
-		 */
-		return next.handle().pipe(
-			map((data) => {
-				// Get the response object from context
-				const ctx = context.switchToHttp();
-				const Response = ctx.getResponse();
-				// Get the status code from the response object
-				const statusCode: number = Response.statusCode;
+  intercept(context: ExecutionContext, next: CallHandler<any>): any {
+    // Switch to HTTP context
+    const ctx = context.switchToHttp();
+    // Get the response object from context
+    const Response = ctx.getResponse<Response>();
+    // Get the status code from the response object
+    const statusCode: number = Response.statusCode;
 
-				// Return a simple text response if data was a string
-				if (typeof data === 'string') {
-					return {
-						statusCode,
-						success: true,
-						message: data,
-					};
-				}
+    return next.handle().pipe(
+      map((data: Record<string, any> | string) => {
+        // Return a simple text response if data was a string
+        if (typeof data === 'string') {
+          return {
+            statusCode,
+            success: true,
+            message: data,
+            data: {},
+          };
+        }
 
-				// Set the default message
-				let message: string = 'Process ended successfully';
+        // Set the default message
+        let message: string = 'Process ended successfully';
 
-				// Check if the data object has a message property
-				if (data && typeof data === 'object' && 'message' in data) {
-					message = data.message;
-					delete data.message;
-				}
+        // Check if the data object has a message property
+        if (data && typeof data === 'object' && 'message' in data) {
+          message = data.message as string;
+          delete data.message;
+        }
 
-				// Return the response object
-				return {
-					statusCode,
-					success: true,
-					message,
-					data: Object.keys(data).length ? data : undefined,
-				};
-			}),
-		);
-	}
+        data = Object.keys(data).length ? data : Array.isArray(data) ? { items: data } : {};
+
+        // Return the response object
+        return {
+          statusCode,
+          success: true,
+          message,
+          data,
+        };
+      }),
+    );
+  }
 }

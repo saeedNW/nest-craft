@@ -1,35 +1,38 @@
 {
-	"name": "nest-craft",
-	"version": "1.3.0",
-	"main": "bin/index.js",
-	"bin": {
-		"nest-craft": "./bin/index.js"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/saeedNW/nest-craft.git"
-	},
-	"keywords": [
-		"Nest",
-		"NestCraft",
-		"Custom Nest Project",
-		"Nest generator"
-	],
-	"author": "Saeed Norouzi",
-	"license": "MIT",
-	"type": "module",
-	"bugs": {
-		"url": "https://github.com/saeedNW/nest-craft/issues"
-	},
-	"homepage": "https://github.com/saeedNW/nest-craft#readme",
-	"description": "A CLI tool to craft custom NestJS projects with tailored configurations and features.",
-	"dependencies": {
-		"@clack/prompts": "^0.9.0",
-		"chalk": "^5.4.1",
-		"execa": "^9.5.2",
-		"figlet": "^1.8.0"
-	}
+  "name": "nest-craft",
+  "version": "1.3.0",
+  "main": "bin/index.js",
+  "bin": {
+    "nest-craft": "./bin/index.js"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saeedNW/nest-craft.git"
+  },
+  "keywords": [
+    "Nest",
+    "NestCraft",
+    "Custom Nest Project",
+    "Nest generator"
+  ],
+  "author": "Saeed Norouzi",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/saeedNW/nest-craft/issues"
+  },
+  "homepage": "https://github.com/saeedNW/nest-craft#readme",
+  "description": "A CLI tool to craft custom NestJS projects with tailored configurations and features.",
+  "dependencies": {
+    "@clack/prompts": "^0.9.0",
+    "chalk": "^5.4.1",
+    "execa": "^9.5.2",
+    "figlet": "^1.8.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
 }

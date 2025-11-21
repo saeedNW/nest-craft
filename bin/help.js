@@ -2,7 +2,7 @@
  * Displays help information for the CLI tool.
  */
 export function displayHelp() {
-	console.log(`Usage: nest-craft [command]
+  console.log(`Usage: nest-craft [command]
 
 Commands:
   init                 Initialize a new NestJS project

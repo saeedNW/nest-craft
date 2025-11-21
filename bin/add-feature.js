@@ -1,58 +1,56 @@
-import { outro, tasks } from "@clack/prompts";
-import { selectDockerServices } from "../lib/docker/service-selector.js";
-import { ensureDirectoryPermissions } from "../lib/functions/ensure-dir-permission.js";
-import { errorHandler } from "../lib/functions/error-handler.js";
-import { displayBanner } from "../lib/functions/main-banner.js";
-import { resolveProjectPaths } from "../lib/functions/resolve-project-path.js";
-import { booleanPrompt } from "../lib/prompts/boolean.prompt.js";
-import { cancelPrompt } from "../lib/prompts/cancel.prompt.js";
-import { promptPackageManager } from "../lib/prompts/package-manager.prompt.js";
-import { promptPaginationType } from "../lib/prompts/pagination.prompt.js";
-import { textPrompt } from "../lib/prompts/text.prompt.js";
-import { isNestProject } from "../lib/shell/shell.commands.js";
-import { dockerComposeGenerator } from "../lib/docker/config-generator.js";
-import { filesManager } from "../lib/files/files.manager.js";
-import chalk from "chalk";
+import { outro, tasks } from '@clack/prompts';
+import chalk from 'chalk';
+import { dockerComposeGenerator } from '../lib/docker/config-generator.js';
+import { selectDockerServices } from '../lib/docker/service-selector.js';
+import { filesManager } from '../lib/files/files.manager.js';
+import { ensureDirectoryPermissions } from '../lib/functions/ensure-dir-permission.js';
+import { errorHandler } from '../lib/functions/error-handler.js';
+import { displayBanner } from '../lib/functions/main-banner.js';
+import { resolveProjectPaths } from '../lib/functions/resolve-project-path.js';
+import { booleanPrompt } from '../lib/prompts/boolean.prompt.js';
+import { cancelPrompt } from '../lib/prompts/cancel.prompt.js';
+import { promptPackageManager } from '../lib/prompts/package-manager.prompt.js';
+import { promptPaginationType } from '../lib/prompts/pagination.prompt.js';
+import { textPrompt } from '../lib/prompts/text.prompt.js';
+import { isNestProject } from '../lib/shell/shell.commands.js';
 
 export async function addFeature() {
-	// Display the CLI banner and introduction message.
-	displayBanner("Adding feature to existing project");
+  // Display the CLI banner and introduction message.
+  displayBanner('Adding feature to existing project');
 
-	// Prompt the user to input the project's path
-	const projectPath = await textPrompt(
-		'Enter Project\'s directory path [Current directory "."]:',
-		true
-	);
-	// Handle cancellation during the prompt.
-	cancelPrompt(projectPath);
+  // Prompt the user to input the project's path
+  const projectPath = await textPrompt(
+    'Enter Project\'s directory path [Current directory "."]:',
+    true,
+  );
+  // Handle cancellation during the prompt.
+  cancelPrompt(projectPath);
 
-	// Resolve the project paths based on the user input.
-	const { targetDirectory, parentDirectory } = await resolveProjectPaths(
-		projectPath
-	);
+  // Resolve the project paths based on the user input.
+  const { targetDirectory, parentDirectory } = await resolveProjectPaths(projectPath);
 
-	try {
-		// Ensure the target and parent directories have the necessary writing permissions.
-		await ensureDirectoryPermissions(targetDirectory, parentDirectory, true);
+  try {
+    // Ensure the target and parent directories have the necessary writing permissions.
+    await ensureDirectoryPermissions(targetDirectory, parentDirectory, true);
 
-		// Ensure the target directory contain a NestJS project
-		await isNestProject(targetDirectory);
+    // Ensure the target directory contain a NestJS project
+    await isNestProject(targetDirectory);
 
-		// Prompt the user to select a package manager.
-		const packageManager = await promptPackageManager();
-		cancelPrompt(packageManager); // Handle cancellation during the prompt.
+    // Prompt the user to select a package manager.
+    const packageManager = await promptPackageManager();
+    cancelPrompt(packageManager); // Handle cancellation during the prompt.
 
-		// Collect additional project configuration options from the user.
-		const options = await collectOptions();
+    // Collect additional project configuration options from the user.
+    const options = await collectOptions();
 
-		await featureFinalization(targetDirectory, packageManager, options);
+    await featureFinalization(targetDirectory, packageManager, options);
 
-		// Display a success message upon completing the project setup.
-		outro(chalk.green("Thanks for using Nest Craft! Your project is ready."));
-	} catch (error) {
-		// Handle errors by passing the error message and removing the new directory.
-		await errorHandler(error);
-	}
+    // Display a success message upon completing the project setup.
+    outro(chalk.green('Thanks for using Nest Craft! Your project is ready.'));
+  } catch (error) {
+    // Handle errors by passing the error message and removing the new directory.
+    await errorHandler(error);
+  }
 }
 
 /**
@@ -64,6 +62,7 @@ export async function addFeature() {
  * - Swagger configuration
  * - Pagination utility
  * - Multer file uploader
+ * - Prettier tab indentation
  *
  * @returns {Promise<Object>} An object containing the selected options:
  * - dockerComposeConfig: The selected Docker services configuration.
@@ -73,44 +72,45 @@ export async function addFeature() {
  * - swaggerConfig: Boolean indicating if Swagger config is needed.
  * - paginationType: The selected pagination utility type (if any).
  * - multer: Boolean indicating if Multer file uploader is needed.
+ * - prettier: Boolean indicating if prettier should use tab indentation.
  */
 async function collectOptions() {
-	// Prompt the user to select Docker services configuration.
-	const dockerComposeConfig = await selectDockerServices();
+  // Prompt the user to select Docker services configuration.
+  const dockerComposeConfig = await selectDockerServices();
 
-	// Prompt the user to decide whether they need a custom exception filter.
-	const customFilter = await booleanPrompt(
-		"Do you need a Custom Exception Filter?"
-	);
+  // Prompt the user to decide whether they need a custom exception filter.
+  const customFilter = await booleanPrompt('Do you need a Custom Exception Filter?');
 
-	// Prompt the user to decide whether they need a custom unprocessable entity pipe.
-	const customPipe = await booleanPrompt(
-		"Do you need a Custom Unprocessable Entity Pipe?"
-	);
+  // Prompt the user to decide whether they need a custom unprocessable entity pipe.
+  const customPipe = await booleanPrompt('Do you need a Custom Unprocessable Entity Pipe?');
 
-	// Prompt the user to decide whether they need a custom response interceptor.
-	const customInterceptor = await booleanPrompt(
-		"Do you need a Custom Response Interceptor?"
-	);
+  // Prompt the user to decide whether they need a custom response interceptor.
+  const customInterceptor = await booleanPrompt('Do you need a Custom Response Interceptor?');
 
-	// Prompt the user to decide whether they need Swagger configuration.
-	const swaggerConfig = await booleanPrompt("Do you need Swagger config?");
+  // Prompt the user to decide whether they need Swagger configuration.
+  const swaggerConfig = await booleanPrompt('Do you need Swagger config?');
 
-	// Prompt the user to select a pagination utility type (TypeORM, Mongoose, or None).
-	const paginationType = await promptPaginationType();
+  // Prompt the user to select a pagination utility type (TypeORM, Mongoose, or None).
+  const paginationType = await promptPaginationType();
 
-	// Prompt the user to decide whether they need Multer file uploader.
-	const multer = await booleanPrompt("Do you need Multer File Uploader?");
+  // Prompt the user to decide whether they need Multer file uploader.
+  const multer = await booleanPrompt('Do you need Multer File Uploader?');
 
-	return {
-		dockerComposeConfig,
-		customFilter,
-		customPipe,
-		customInterceptor,
-		swaggerConfig,
-		paginationType,
-		multer,
-	};
+  // Prompt the user to decide whether they want to use tabs as indentation or not
+  const prettier = await booleanPrompt(
+    'Do you want prettier to use tabs for indentation instead of spaces?',
+  );
+
+  return {
+    dockerComposeConfig,
+    customFilter,
+    customPipe,
+    customInterceptor,
+    swaggerConfig,
+    paginationType,
+    multer,
+    prettier,
+  };
 }
 
 /**
@@ -124,19 +124,16 @@ async function collectOptions() {
  * @param {Object} options Options for customizing project setup (including Docker config, Nest options, etc.).
  */
 async function featureFinalization(targetDirectory, packageManager, options) {
-	await tasks([
-		{
-			title: "Adding features",
-			task: async () => {
-				// Generate the Docker Compose file if Docker configuration is provided.
-				await dockerComposeGenerator(
-					targetDirectory,
-					options.dockerComposeConfig
-				);
+  await tasks([
+    {
+      title: 'Adding features',
+      task: async () => {
+        // Generate the Docker Compose file if Docker configuration is provided.
+        await dockerComposeGenerator(targetDirectory, options.dockerComposeConfig);
 
-				// Copy required files into the project based on the options provided (e.g., filters, pipes, interceptors).
-				await filesManager(targetDirectory, packageManager, options, true);
-			},
-		},
-	]);
+        // Copy required files into the project based on the options provided (e.g., filters, pipes, interceptors).
+        await filesManager(targetDirectory, packageManager, options, true);
+      },
+    },
+  ]);
 }

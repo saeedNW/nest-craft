@@ -3,35 +3,28 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
 /**
- * Define swagger consumes type as an enum
+ * Initialize Swagger document
+ * @param {INestApplication} app - NestJS Application instance
+ * @param {string} title - Swagger document title
  */
-export enum SwaggerConsumes {
-	// Swagger form input type
-	URL_ENCODED = 'application/x-www-form-urlencoded',
-	// Swagger raw json data type
-	JSON = 'application/json',
-	// Swagger multipart form data type
-	MULTIPART_FORM_DATA = 'multipart/form-data',
-}
+export function swaggerConfiguration(app: INestApplication, title: string = 'NestJS Application') {
+  // Define Swagger options
+  const document = new DocumentBuilder()
+    .setTitle(title)
+    .setDescription(`${title} documentation`)
+    .setVersion('1.0.0')
+    .addBearerAuth(swaggerBearerAuthConfig(), 'Authorization')
+    .build();
 
-/**
- * initialize swagger document
- * @param app NestJS Application instance
- */
-export function swaggerConfiguration(app: INestApplication) {
-	// define the swagger options and configs
-	const document = new DocumentBuilder()
-		.setTitle('NestJS Application')
-		.setDescription('API documentation of the NestJS application')
-		.setVersion('1.0.0')
-		.addBearerAuth(swaggerBearerAuthConfig(), 'Authorization')
-		.build();
+  // Initialize Swagger document
+  const swaggerDocument = SwaggerModule.createDocument(app, document);
 
-	// Initialize swagger document based on defined options
-	const swaggerDocument = SwaggerModule.createDocument(app, document);
-
-	// setup swagger ui page
-	SwaggerModule.setup('/api-doc', app, swaggerDocument);
+  // Setup Swagger UI with custom options
+  SwaggerModule.setup('/api/doc/8888', app, swaggerDocument, {
+    swaggerOptions: { filter: true },
+    customCssUrl: '/swagger-ui/custom.css',
+    customJs: '/swagger-ui/custom.js',
+  });
 }
 
 /**
@@ -39,10 +32,10 @@ export function swaggerConfiguration(app: INestApplication) {
  * @returns {SecuritySchemeObject} - Swagger bearer Auth scheme object
  */
 function swaggerBearerAuthConfig(): SecuritySchemeObject {
-	return {
-		type: 'http',
-		bearerFormat: 'JWT',
-		in: 'header',
-		scheme: 'bearer',
-	};
+  return {
+    type: 'http',
+    bearerFormat: 'JWT',
+    in: 'header',
+    scheme: 'bearer',
+  };
 }
