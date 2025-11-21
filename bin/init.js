@@ -15,6 +15,7 @@ import { cancelPrompt } from '../lib/prompts/cancel.prompt.js';
 import { promptGlobalPrefix } from '../lib/prompts/global-prefix.prompt.js';
 import { promptPackageManager } from '../lib/prompts/package-manager.prompt.js';
 import { promptPaginationType } from '../lib/prompts/pagination.prompt.js';
+import { promptSecurityOptions } from '../lib/prompts/security-options.prompt.js';
 import { selectPrompt } from '../lib/prompts/select.prompt.js';
 import { textPrompt } from '../lib/prompts/text.prompt.js';
 import {
@@ -137,6 +138,9 @@ async function collectOptions() {
   // Prompt the user to decide whether they need Swagger configuration.
   const swaggerConfig = await booleanPrompt('Do you need Swagger config?');
 
+  // Prompt the user to decide whether they need security options.
+  const securityOptions = await promptSecurityOptions();
+
   // Prompt the user to decide whether they need a user definition for `request.user`.
   const userDefinition = await booleanPrompt('Do you need a User Definition for `request.user`?');
 
@@ -166,6 +170,7 @@ async function collectOptions() {
     customPipe,
     customInterceptor,
     swaggerConfig,
+    securityOptions,
     userDefinition,
     paginationType,
     multer,
