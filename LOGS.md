@@ -1,5 +1,27 @@
 # Change Logs for NestCraft CLI Tool
 
+# Change Logs for NestCraft CLI Tool
+
+## [1.4.0] - 2025-11-21
+
+### Features
+
+- Added prompt-driven global API prefix setup (default `/api`) that wires `app.setGlobalPrefix`.
+- Introduced optional URI-based API versioning, enabled directly in `main.ts`.
+- Added security utilities prompt with CORS helper, opinionated Helmet config, and fake tech stack headers interceptor.
+- Shipped enriched Swagger UI assets (search, RBAC badges, quick navigation) and served them from the generated project automatically.
+- Added pagination DTO/interface/utilities for TypeORM and Mongoose, plus expanded Multer helpers (config, utilities, typings).
+
+### Improvements
+
+- Docker Compose generator now supports validated custom networks, smarter `depends_on`, and drops service-specific config files (Dockerfile, nginx.conf).
+- File manager now seeds `.prettierrc`, `.prettierignore`, `eslint.config.mjs`, env/request type definitions, and new security files as needed.
+- `main.ts` modifier consistently upgrades projects to `NestExpressApplication`, registers static assets, injects selected filters/interceptors, and wraps `bootstrap()` with error handling.
+
+### Documentation
+
+- Rebuilt the README to cover the new prompts, feature walk-throughs, advanced configuration tips, and changelog.
+
 ## [1.3.0] - 2025-01-15
 
 ### Features

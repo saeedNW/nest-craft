@@ -1,6 +1,6 @@
 {
   "name": "nest-craft",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "bin/index.js",
   "bin": {
     "nest-craft": "./bin/index.js"

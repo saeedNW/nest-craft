@@ -13,7 +13,7 @@ Nest Craft is a batteries-included CLI that scaffolds real-world ready NestJS pr
 
 - Interactive workflow powered by `@clack/prompts` that keeps cancellation safe and error-aware.
 - Multi-package-manager support (npm, yarn, pnpm) with automatic dependency installs for every feature you toggle on.
-- Production-first template: ConfigModule + env files, global pipes/filters/interceptors, custom Swagger UI, pagination helpers, Multer utilities, typed request/environment definitions, and Jest E2E tweaks.
+- Production-first template: ConfigModule + env files, global pipes/filters/interceptors, custom Swagger UI, pagination helpers, Multer utilities, typed request/environment definitions, global API prefixing, versioning, security middleware, and Jest E2E tweaks.
 - Docker Compose generator with custom network support, smart `depends_on`, service-specific configs (Node, MongoDB, Redis, RabbitMQ, Kafka, Elasticsearch, Nginx, etc.), and file drops (Dockerfile, nginx.conf).
 - Feature injector (`--add-feature`) that can enhance an existing NestJS repo without re-scaffolding it.
 - Guard rails: directory permission verification, non-sudo enforcement, automatic cleanup on failure, and a bannered UX so contributors know what is happening.
@@ -38,7 +38,7 @@ nest-craft init
 
 1. Provide a project name or absolute path. Nest Craft will create missing folders, ensure write access, and optionally initialize Git.
 2. Pick your package manager.
-3. Toggle Docker services, Swagger, exception filters, ValidationPipe, response interceptors, pagination utils, Multer utilities, user/request typings, and Prettier indentation.
+3. Toggle Docker services, Swagger, security middleware, ValidationPipe, response interceptors, pagination utils, Multer utilities, user/request typings, Prettier indentation, a custom global API prefix, and URI-based API versioning.
 4. Optionally pass extra `nest new` flags (e.g., `--strict`) – conflicting flags such as `--skip-git` or `--package-manager` are sanitized automatically.
 
 To retrofit features into an existing NestJS project:
@@ -136,11 +136,25 @@ async upload(@UploadedFile() file: TMulterFile) {
 - **Validation pipe**: If you opt in, `main.ts` wires a global `ValidationPipe` configured for `whitelist`, `transform`, and `HttpStatus.UNPROCESSABLE_ENTITY`.
 - **Prettier indentation**: Pick tabs or spaces during scaffolding; we mutate `.prettierrc` for you.
 
+### Global API prefix & versioning
+
+- **Global prefix prompt**: Decide whether every route should be wrapped in a custom prefix (defaults to `/api`). The generator updates `main.ts` with `app.setGlobalPrefix('<prefix>')`, so your routes and Swagger UI stay aligned automatically.
+- **API versioning toggle**: Opt into URI-based versioning with a single prompt. Nest Craft wires `app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' })`, meaning controllers can declare `@Version('1')` (or later `2`, `3`, …) without extra glue.
+
+### Security utilities
+
+- **Prompt-driven multi-select**: Enable any combination of CORS, Helmet, and “fake tech stack” headers. All options live under a single `security` directory for clarity.
+- **CORS**: Copies a reusable `getCorsConfig()` helper that expects a `CORS_ORIGIN` env var (auto-appended to your new `.env` files) and wires `app.enableCors(...)` with the right defaults.
+- **Helmet**: Installs `helmet`, adds a hardening-focused config (`contentSecurityPolicy`, `hsts`, `noSniff`, etc.), and mounts it globally.
+- **Custom headers interceptor**: Spoof the `X-Powered-By` and `Server` headers to disguise your real stack. This interceptor is added to the global interceptor chain alongside any response transformer you selected.
+
 ---
 
 ## Advanced configuration & tips
 
 - **Extra Nest flags**: Use the final prompt to pass additional `nest new` options (e.g., `--strict --language ts`). Nest Craft strips duplicate `--skip-git` / `--package-manager` flags to avoid conflicts.
+- **Fine-tune routing**: You can change the generated global prefix or versioning strategy later by editing `src/main.ts`—the scaffolder only seeds the initial setting.
+- **Customize CORS origins**: After scaffolding, edit `CORS_ORIGIN` inside `.env` / `.env.development.local` to a comma-delimited list of front-end origins that should be allowed.
 - **Permissions**: The CLI refuses to run as `root` and validates directory write access before doing anything destructive. If something fails, it rolls back the partially created folders.
 - **Feature injection caveats**: `--add-feature` skips Jest reconfiguration but still installs dependencies, copies configs (including `.prettierrc/.prettierignore`), and can regenerate Docker Compose files in-place.
 - **Static asset path change**: Upload helpers now target `assets/uploads`, so ensure your platform (e.g., reverse proxies) know about the new directory when upgrading from <=1.3.0.
@@ -156,6 +170,7 @@ Changes since `1.3.0` (unreleased work in `main`):
 - Pagination toolkit rewritten around `PaginationDto`, `Pagination/ PaginatedResult` interfaces, and driver-specific utilities that emit metadata and navigation links.
 - Multer utilities promoted into their own module set (`multer.config.ts`, `multer.utilities.ts`, `multer.types.ts`) with strongly typed callbacks, temp directories under `assets`, and file cleanup helpers.
 - Docker Compose generator now supports validated custom networks, smarter `depends_on` blocks for the Node service, and automatically drops Dockerfile/nginx.conf when relevant services are selected.
+- Global API prefix prompt, URI-based versioning toggle, and security utilities (CORS helper, opinionated Helmet config, fake tech stack headers) that wire themselves into `main.ts` and seed the corresponding files/env vars.
 - Improved prompts, permission checks, directory creation helpers, and `main.ts` mutations (NestExpressApplication, static assets, bootstrap error handling).
 
 **Suggested release:** `1.4.0` (minor) – new features + template refinements without breaking the CLI surface area, but note the new default `assets/uploads` path for file uploads.
