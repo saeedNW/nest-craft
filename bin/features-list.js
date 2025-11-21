@@ -11,7 +11,8 @@ const features = [
   'Multer File Upload Utility',
   'Prettier Configuration Setup',
   'Jest Configuration Setup',
-  'API Prefix Configuration Setup',
+  'API Prefix Setup',
+  'API Version Setup',
 ];
 
 const options = [
@@ -44,6 +45,7 @@ const options = [
   'Multer File Upload: Adds Multer integration for file uploads',
   'Prettier Configuration: Configurable Prettier setup to use tabs as indentation',
   'Prefix Configuration: Add API Prefix support to the main file',
+  'Version Configuration: Add API Version support to the main file',
   'Jest Configuration: Updated Jest configuration for absolute imports',
 ];
 

@@ -12,6 +12,7 @@ import { createParentDirectory } from '../lib/functions/parent-dir-manager.js';
 import { resolveProjectPaths } from '../lib/functions/resolve-project-path.js';
 import { booleanPrompt } from '../lib/prompts/boolean.prompt.js';
 import { cancelPrompt } from '../lib/prompts/cancel.prompt.js';
+import { promptGlobalPrefix } from '../lib/prompts/global-prefix.prompt.js';
 import { promptPackageManager } from '../lib/prompts/package-manager.prompt.js';
 import { promptPaginationType } from '../lib/prompts/pagination.prompt.js';
 import { selectPrompt } from '../lib/prompts/select.prompt.js';
@@ -22,7 +23,6 @@ import {
   manageAppModule,
   runPrettier,
 } from '../lib/shell/shell.commands.js';
-import { promptGlobalPrefix } from '../lib/prompts/global-prefix.prompt.js';
 
 export async function initialization() {
   // Display the CLI banner and introduction message.
@@ -154,6 +154,8 @@ async function collectOptions() {
   // Prompt the user to decide whether they want to use API prefix or not
   const prefix = await promptGlobalPrefix();
 
+  const apiVersioning = await booleanPrompt('Do you want to enable API versioning in your app?');
+
   // Prompt the user for any additional 'nest new' options.
   const nestOptions = await textPrompt("Enter any other 'nest new' options you need.", false);
   cancelPrompt(nestOptions); // Handle cancellation during the prompt.
@@ -169,6 +171,7 @@ async function collectOptions() {
     multer,
     prettier,
     prefix,
+    apiVersioning,
     nestOptions: sanitizeNestOptions(nestOptions),
   };
 }
