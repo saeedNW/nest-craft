@@ -38,7 +38,7 @@ nest-craft init
 
 1. Provide a project name or absolute path. Nest Craft will create missing folders, ensure write access, and optionally initialize Git.
 2. Pick your package manager.
-3. Toggle Docker services, Swagger, security middleware, ValidationPipe, response interceptors, pagination utils, Multer utilities, user/request typings, Prettier indentation, a custom global API prefix, and URI-based API versioning.
+3. Toggle Docker services, Swagger, security middleware, ValidationPipe, response interceptors, pagination utils, Multer utilities, Winston Logger, user/request typings, Prettier indentation, a custom global API prefix, and URI-based API versioning.
 4. Optionally pass extra `nest new` flags (e.g., `--strict`) – conflicting flags such as `--skip-git` or `--package-manager` are sanitized automatically.
 
 To retrofit features into an existing NestJS project:
@@ -129,6 +129,36 @@ async upload(@UploadedFile() file: TMulterFile) {
 }
 ```
 
+### Winston Logger
+
+Enable Winston Logger to get a production-ready logging solution with structured logging, request tracking, and automatic file rotation:
+
+- **AppLogger Service**: Drop-in replacement for NestJS default logger that implements `LoggerService` interface
+- **Request Context Tracking**: Automatically tracks request IDs, method, URL, IP, and user agent across the entire request lifecycle using AsyncLocalStorage
+- **HTTP Request/Response Logging**: Logging interceptor automatically logs all incoming requests and outgoing responses with timing and status codes
+- **Console Overrides**: All `console.*` calls are automatically routed through Winston for consistent logging
+- **Daily Rotating Logs**: Logs are automatically rotated daily with separate files for general logs (`app-*.log`) and errors (`error-*.log`)
+- **Environment-Aware**: Different log levels and formats for development (colorized, human-readable) and production (structured JSON)
+- **Configurable**: Control log levels, directory, retention, and file size via environment variables (`LOG_LEVEL`, `LOG_DIR`, `LOG_MAX_FILES`, `LOG_MAX_SIZE`)
+
+The logger module is registered globally and automatically replaces NestJS's default logger. All logs include request context (request ID, method, URL) for easy correlation:
+
+```ts
+import { AppLogger } from './modules/logger';
+
+@Injectable()
+export class UserService {
+  constructor(private readonly logger: AppLogger) {}
+
+  async findUser(id: string) {
+    this.logger.log(`Finding user ${id}`, 'UserService');
+    // Request ID, method, and URL are automatically included in logs
+  }
+}
+```
+
+Logs are written to both console (in development) and files (in production), with automatic compression and symlinks for easy access to current logs.
+
 ### Additional utilities
 
 - **Static assets**: Every project serves the `assets` folder automatically – swagger UI, uploads, and any other static resources can live there.
@@ -163,8 +193,9 @@ async upload(@UploadedFile() file: TMulterFile) {
 
 ## What's New
 
-Changes since `1.4.0` (unreleased work in `main`):
+Changes since `1.4.0`:
 
+- **Winston Logger**: Added comprehensive production-ready logging solution with request context tracking, automatic HTTP request/response logging, daily rotating file logs, console overrides, and environment-aware configuration. The logger module is globally registered and automatically replaces NestJS's default logger.
 - Overhauled file copier to always scaffold `.prettierrc`, `.prettierignore`, `eslint.config.mjs`, typed env/request definitions, and assets folder registration.
 - Brand-new Swagger UX (`configs/swagger.config.ts` + `assets/swagger-ui/**`) with endpoint search, RBAC indicators, a collapsible quick nav sidebar, and a locked `/api/doc/8888` mount.
 - Pagination toolkit rewritten around `PaginationDto`, `Pagination/ PaginatedResult` interfaces, and driver-specific utilities that emit metadata and navigation links.
@@ -173,7 +204,7 @@ Changes since `1.4.0` (unreleased work in `main`):
 - Global API prefix prompt, URI-based versioning toggle, and security utilities (CORS helper, opinionated Helmet config, fake tech stack headers) that wire themselves into `main.ts` and seed the corresponding files/env vars.
 - Improved prompts, permission checks, directory creation helpers, and `main.ts` mutations (NestExpressApplication, static assets, bootstrap error handling).
 
-**Suggested release:** `1.4.0` (minor) – new features + template refinements without breaking the CLI surface area, but note the new default `assets/uploads` path for file uploads.
+**Current release:** `1.5.0` (minor) – Winston Logger feature addition with no breaking changes.
 
 See [LOGS.md](LOGS.md) for the historical changelog.
 

@@ -1,6 +1,30 @@
 # Change Logs for NestCraft CLI Tool
 
-# Change Logs for NestCraft CLI Tool
+## [1.5.0] - 2025-12-12
+
+### Features
+
+- **[Winston Logger]**: Added comprehensive Winston-based logging solution with production-ready features:
+  - **AppLogger Service**: Implements NestJS `LoggerService` interface, providing structured logging with request context tracking
+  - **Environment-aware Configuration**: Automatically configures log levels based on `NODE_ENV` (debug for development, info for production, warn for test)
+  - **Daily Rotating File Logs**: Automatically rotates log files daily with configurable retention (`LOG_MAX_FILES`) and size limits (`LOG_MAX_SIZE`)
+  - **Dual Log Files**: Separate files for general application logs (`app-*.log`) and error logs (`error-*.log`)
+  - **Format Flexibility**: Human-readable, colorized output in development; structured JSON in production
+  - **Console Overrides**: Automatically routes all `console.*` calls through Winston for consistent logging
+  - **Request Context Middleware**: Tracks request IDs, method, URL, IP, and user agent across the request lifecycle using AsyncLocalStorage
+  - **Logging Interceptor**: Automatically logs all HTTP requests and responses with timing information and status codes
+  - **Request ID Correlation**: Generates unique request IDs (or uses `X-Request-Id` header) and includes them in all logs for easy tracing
+  - **Global Module**: Logger module is registered globally, making it available throughout the application without explicit imports
+
+### Improvements
+
+- Logger configuration respects environment variables (`LOG_LEVEL`, `LOG_DIR`, `LOG_MAX_FILES`, `LOG_MAX_SIZE`) for flexible deployment scenarios
+- Log files are automatically compressed and symlinked for easy access to current logs
+- Test environment automatically silences non-error logs to keep test output clean
+
+### Dependencies
+
+- Installs `nest-winston`, `winston`, `winston-daily-rotate-file`, and `uuid` when Winston Logger is enabled
 
 ## [1.4.0] - 2025-11-21
 
