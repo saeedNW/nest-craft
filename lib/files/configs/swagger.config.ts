@@ -8,8 +8,8 @@ import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-s
  * @param {string} title - Swagger document title
  */
 export function swaggerConfiguration(app: INestApplication, title: string = 'NestJS Application') {
-	if (process.env.NODE_ENV !== 'development') return;
-	
+  if (process.env.NODE_ENV !== 'development') return;
+
   // Define Swagger options
   const document = new DocumentBuilder()
     .setTitle(title)

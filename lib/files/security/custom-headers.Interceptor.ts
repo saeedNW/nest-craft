@@ -1,6 +1,6 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { Response } from "express";
-import { Observable } from "rxjs";
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Response } from 'express';
+import { Observable } from 'rxjs';
 
 /**
  * Interceptor to modify the response headers.
@@ -14,8 +14,8 @@ export class CustomHeadersInterceptor implements NestInterceptor {
     const response = context.switchToHttp().getResponse<Response>();
 
     // Modify the response headers
-    response.setHeader("X-Powered-By", "Python 3.14.0"); // Fake the tech stack
-    response.setHeader("Server", "Gunicorn/20.1.0"); // Mimic a Python server
+    response.setHeader('X-Powered-By', 'Python 3.14.0'); // Fake the tech stack
+    response.setHeader('Server', 'Gunicorn/20.1.0'); // Mimic a Python server
 
     return next.handle();
   }

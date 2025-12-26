@@ -35,14 +35,13 @@ export class PaginationDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-	filter?: Record<string, any>;
+  filter?: Record<string, any>;
 
   // computed
   get skip() {
     return (this.page - 1) * this.limit;
   }
 }
-
 
 //? Filter Implementation Example
 /**

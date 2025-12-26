@@ -8,18 +8,18 @@ import { RequestContextService } from './request-context.service';
 
 @Global()
 @Module({
-	imports: [
-		WinstonModule.forRootAsync({
-			useClass: LoggerConfigService,
-		}),
-	],
-	providers: [
-		LoggerConfigService,
-		RequestContextService,
-		RequestContextMiddleware,
-		AppLogger,
-		LoggingInterceptor,
-	],
-	exports: [AppLogger, RequestContextService, RequestContextMiddleware, LoggingInterceptor],
+  imports: [
+    WinstonModule.forRootAsync({
+      useClass: LoggerConfigService,
+    }),
+  ],
+  providers: [
+    LoggerConfigService,
+    RequestContextService,
+    RequestContextMiddleware,
+    AppLogger,
+    LoggingInterceptor,
+  ],
+  exports: [AppLogger, RequestContextService, RequestContextMiddleware, LoggingInterceptor],
 })
 export class LoggerModule {}

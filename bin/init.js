@@ -151,10 +151,10 @@ async function collectOptions() {
   const paginationType = await promptPaginationType();
 
   // Prompt the user to decide whether they need Multer file uploader.
-	const multer = await booleanPrompt('Do you need Multer File Uploader?');
+  const multer = await booleanPrompt('Do you need Multer File Uploader?');
 
-	// Prompt the user to decide whether they need a custom Winston Logger or not
-	const winstonLogger = await booleanPrompt('Do you need a custom Winston Logger?');
+  // Prompt the user to decide whether they need a custom Winston Logger or not
+  const winstonLogger = await booleanPrompt('Do you need a custom Winston Logger?');
 
   // Prompt the user to decide whether they want to use tabs as indentation or not
   const prettier = await booleanPrompt(
@@ -162,9 +162,9 @@ async function collectOptions() {
   );
 
   // Prompt the user to decide whether they want to use API prefix or not
-	const prefix = await promptGlobalPrefix();
+  const prefix = await promptGlobalPrefix();
 
-	// Prompt the user to decide whether they want to enable API versioning or not
+  // Prompt the user to decide whether they want to enable API versioning or not
   const apiVersioning = await booleanPrompt('Do you want to enable API versioning in your app?');
 
   // Prompt the user for any additional 'nest new' options.
@@ -180,8 +180,8 @@ async function collectOptions() {
     securityOptions,
     userDefinition,
     paginationType,
-		multer,
-		winstonLogger,
+    multer,
+    winstonLogger,
     prettier,
     prefix,
     apiVersioning,
