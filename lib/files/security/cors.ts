@@ -9,12 +9,14 @@ function getEnvVariable(key: string): string {
 }
 
 export function getCorsConfig(origin: string[]): CorsOptions {
+  const corsOrigin = origin ?? getEnvVariable('CORS_ORIGIN').split(',');
+  const finalOrigin = corsOrigin.includes('*') ? '*' : corsOrigin;
   return {
-    origin: origin ?? getEnvVariable('CORS_ORIGIN').split(','), // Restrict origins (use env variable)
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // OPTIONS is automatically handled
+    origin: finalOrigin, // Restrict origins (use env variable)
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // OPTIONS is automatically handled
     allowedHeaders: ['Content-Type', 'Authorization'], // Restrict headers
-    credentials: true, // Allow cookies, but only if origin is not "*"
-    preflightContinue: false, // Automatically handle preflight requests
+    credentials: false, // Allow cookies, but only if origin is not "*"
+    preflightContinue: false, // Handle preflight requests
     optionsSuccessStatus: 204, // Respond with 204 for preflight requests (improves performance)
   };
 }
