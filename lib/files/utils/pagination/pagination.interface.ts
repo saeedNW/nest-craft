@@ -1,4 +1,18 @@
 /**
+ * Individual pagination link item.
+ */
+export interface PaginationLinkItem {
+  label: string; // Display label for the link
+  url: string | null; // URL for the link, null if not available
+  page: number | null; // Page number, null if not applicable
+}
+
+/**
+ * Links for pagination navigation.
+ */
+export type PaginationLinks = Array<PaginationLinkItem>;
+
+/**
  * Metadata for pagination details.
  */
 export interface PaginationMeta {
@@ -8,16 +22,6 @@ export interface PaginationMeta {
   totalPages: number; // Total number of pages
   currentPage: number; // Current page number
   firstItem: number; // Current page's first item number
-}
-
-/**
- * Links for pagination navigation.
- */
-export interface PaginationLinks {
-  first: string; // Link to the first page
-  previous: string; // Link to the previous page
-  next: string; // Link to the next page
-  last: string; // Link to the last page
 }
 
 /**

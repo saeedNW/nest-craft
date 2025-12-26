@@ -61,40 +61,84 @@ export async function mongoPaginate<T extends Document>(
       currentPage: Number(page),
       firstItem: skip + 1,
     },
-    links: getPaginationLinks(link, paginationDto, totalItems),
+    links: getPaginationLinks(paginationDto, totalItems, link),
   };
 }
 
 /**
  * Generate pagination navigation links.
  *
- * @param {string} link - The endpoint to which the data retrieved from.
  * @param {PaginationDto} paginationDto - DTO containing pagination parameters (page, limit, etc.).
  * @param {number} totalItems - Total number of items across all pages.
+ * @param {string} [link] - The endpoint to which the data retrieved from.
  * @returns {PaginationLinks} An object containing navigation links.
  */
 function getPaginationLinks(
-  link: string | undefined,
   paginationDto: PaginationDto,
   totalItems: number,
+  link?: string,
 ): PaginationLinks | undefined {
   if (!link) return undefined;
 
   const totalPages = Math.ceil(totalItems / paginationDto.limit);
+  const currentPage = paginationDto.page;
 
-  // Add '&' if link already has query parameters
-  if (link.includes('?')) link += '&';
+  // Helper function to build URL for a specific page
+  const buildUrl = (page: number): string => {
+    try {
+      // Check if link is a full URL (with protocol) or relative path
+      let url: URL;
+      if (link!.startsWith('http://') || link!.startsWith('https://')) {
+        // Full URL
+        url = new URL(link!);
+      } else {
+        // Relative path - use a dummy base URL to parse it
+        url = new URL(link!, 'http://dummy.com');
+      }
 
-  return {
-    first: `${link}?page=1&limit=${paginationDto.limit}`,
-    previous:
-      paginationDto.page > 1
-        ? `${link}?page=${paginationDto.page - 1}&limit=${paginationDto.limit}`
-        : '',
-    next:
-      paginationDto.page < totalPages
-        ? `${link}?page=${paginationDto.page + 1}&limit=${paginationDto.limit}`
-        : '',
-    last: `${link}?page=${totalPages}&limit=${paginationDto.limit}`,
+      // Update pagination parameters
+      url.searchParams.set('page', String(page));
+      url.searchParams.set('limit', String(paginationDto.limit));
+
+      // If it was a relative path, return only the pathname and search
+      if (!link!.startsWith('http://') && !link!.startsWith('https://')) {
+        return url.pathname + url.search;
+      }
+
+      // Return full URL
+      return url.toString();
+    } catch {
+      // Fallback to simple string manipulation if URL parsing fails
+      const hasQueryParams = link!.includes('?');
+      const separator = hasQueryParams ? '&' : '?';
+      return `${link}${separator}page=${page}&items_per_page=${paginationDto.limit}`;
+    }
   };
+
+  return [
+    {
+      // First page link - always include, null if on first page or only one page
+      label: 'First',
+      url: currentPage > 1 && totalPages > 1 ? buildUrl(1) : null,
+      page: currentPage > 1 && totalPages > 1 ? 1 : null,
+    },
+    {
+      // Previous page link - always include, null if on first page
+      label: 'Previous',
+      url: currentPage > 1 ? buildUrl(currentPage - 1) : null,
+      page: currentPage > 1 ? currentPage - 1 : null,
+    },
+    {
+      // Next page link - always include, null if on last page
+      label: 'Next',
+      url: currentPage < totalPages ? buildUrl(currentPage + 1) : null,
+      page: currentPage < totalPages ? currentPage + 1 : null,
+    },
+    {
+      // Last page link - always include, null if on last page or only one page
+      label: 'Last',
+      url: currentPage < totalPages && totalPages > 1 ? buildUrl(totalPages) : null,
+      page: currentPage < totalPages && totalPages > 1 ? totalPages : null,
+    },
+  ];
 }
